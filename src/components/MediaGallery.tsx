@@ -2,9 +2,16 @@ import { useMediaGallery } from '@hooks/useMediaGallery';
 import { useIntersectionObserver } from '@hooks/useIntersectionObserver';
 import { LoadingSpinner } from '@components/LoadingSpinner';
 import { MediaCard } from './MediaCard';
+import type { MediaFilter, SortOption } from '@store';
 
-export function MediaGallery() {
-  const { items, fetchStatus, hasMore, loadNextPage, remove } = useMediaGallery();
+type Props = {
+  filter: MediaFilter;
+  sort: SortOption;
+  search: string;
+};
+
+export function MediaGallery({ filter, sort, search }: Props) {
+  const { items, fetchStatus, hasMore, loadNextPage, remove } = useMediaGallery({ filter, sort, search });
 
   const handleIntersect = () => {
     if (hasMore && fetchStatus.status !== 'loading') {
@@ -26,6 +33,11 @@ export function MediaGallery() {
           ))}
         </div>
       )}
+
+      {items.length === 0 && !isMediaLoading && fetchStatus.status !== 'idle' && (
+        <p className="py-12 text-center text-sm text-slate-400">No items match your filters</p>
+      )}
+
       {isMediaLoading && <LoadingSpinner />}
 
       {isError && (
@@ -44,7 +56,7 @@ export function MediaGallery() {
         <p className="py-4 text-center text-sm text-slate-400">End of the list: {items.length} items</p>
       )}
 
-      <div ref={sentinelRef} className="h-1" />
+      <div ref={sentinelRef} className="h-px" />
     </div>
   );
 }

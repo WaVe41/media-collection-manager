@@ -1,7 +1,7 @@
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { UploadItem } from '../types/media';
-import type { RootState } from './store';
+import type { UploadItem } from '../../types/media';
+import type { RootState } from '../store';
 
 const uploadAdapter = createEntityAdapter<UploadItem>();
 

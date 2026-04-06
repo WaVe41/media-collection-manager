@@ -1,5 +1,5 @@
-import { addMediaItem, removeOne } from './mediaSlice';
-import { addUploadEntry, removeUploadEntry, selectUploadById } from './uploadSlice';
+import { addMediaItem, removeOne } from './slices/mediaSlice';
+import { addUploadEntry, removeUploadEntry, selectUploadById } from './slices/uploadSlice';
 import { inferMediaType } from '../utils/inferMediaType';
 import type { AppThunk } from './store';
 import type { MediaItem } from '../types/media';

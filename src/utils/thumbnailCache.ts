@@ -21,7 +21,7 @@ export async function getCachedThumbnail(key: string): Promise<Blob | null> {
   const db = await openDb();
   return new Promise((resolve, reject) => {
     const req = db.transaction(STORE_NAME, 'readonly').objectStore(STORE_NAME).get(key);
-    req.onsuccess = () => resolve(req.result);
+    req.onsuccess = () => resolve(req.result instanceof Blob ? req.result : null);
     req.onerror = () => reject(req.error);
   });
 }

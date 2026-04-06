@@ -8,8 +8,8 @@ export {
   selectFetchStatus,
   selectHasMore,
   selectTotal,
-} from './mediaSlice';
-export { startUploadItem, removeMediaItem } from './thunks';
+} from './slices/mediaSlice';
+
 export {
   addUploadEntry,
   removeUploadEntry,
@@ -18,5 +18,9 @@ export {
   setUploadRetry,
   setThumbnail,
   selectUploadById,
-} from './uploadSlice';
-export { selectAllMedia } from './selectors';
+} from './slices/uploadSlice';
+
+export { startUploadItem, removeMediaItem } from './thunks';
+
+export { selectAllMedia, selectFilteredMedia } from './selectors';
+export type { MediaFilter, SortOption } from './selectors';

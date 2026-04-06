@@ -1,8 +1,8 @@
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 import { fetchMediaPage } from '@api/mediaApi';
 import type { RootState } from '@store/store';
-import type { MediaItem } from '../types/media';
-import { createAppAsyncThunk } from './hooks';
+import type { MediaItem } from '../../types/media';
+import { createAppAsyncThunk } from '../hooks';
 
 type FetchStatus =
   | { status: 'idle' }

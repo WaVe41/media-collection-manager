@@ -1,10 +1,20 @@
 import { useEffect, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '@store';
-import { fetchNextPage, removeMediaItem, selectAllMedia, selectFetchStatus, selectHasMore } from '@store';
+import { fetchNextPage, removeMediaItem, selectFetchStatus, selectHasMore } from '@store';
+import { selectFilteredMedia } from '@store/selectors';
+import { useDebounce } from './useDebounce';
+import type { MediaFilter, SortOption } from '@store';
 
-export function useMediaGallery() {
+type Params = {
+  filter: MediaFilter;
+  sort: SortOption;
+  search: string;
+};
+
+export function useMediaGallery({ filter, sort, search }: Params) {
   const dispatch = useAppDispatch();
-  const items = useAppSelector(selectAllMedia);
+  const debouncedSearch = useDebounce(search, 300);
+  const items = useAppSelector(state => selectFilteredMedia(state, filter, sort, debouncedSearch));
   const fetchStatus = useAppSelector(selectFetchStatus);
   const hasMore = useAppSelector(selectHasMore);
 

@@ -39,7 +39,7 @@ const SIZES: Record<MediaType, [number, number]> = {
   document: [50_000, 2_000_000],
 };
 
-const ITEMS_COUNT = 4;
+const ITEMS_COUNT = 60;
 
 export const MOCK_ITEMS: MediaItem[] = Array.from({ length: ITEMS_COUNT }, (_, i) => {
   const name = ALL_NAMES[i % ALL_NAMES.length].replace(/(\.\w+)$/, `_${i + 1}$1`);
@@ -50,6 +50,6 @@ export const MOCK_ITEMS: MediaItem[] = Array.from({ length: ITEMS_COUNT }, (_, i
     name,
     type,
     size: randBetween(minSize, maxSize),
-    createdAt: randomDate(new Date('2026-01-01'), new Date('2026-04-31')),
+    createdAt: randomDate(new Date('2026-01-01'), new Date('2026-04-05')),
   };
 });

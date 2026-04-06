@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import type { ThunkAction, UnknownAction } from '@reduxjs/toolkit';
-import mediaReducer from './mediaSlice';
-import uploadReducer from './uploadSlice';
+import mediaReducer from './slices/mediaSlice';
+import uploadReducer from './slices/uploadSlice';
 
 export const store = configureStore({
   reducer: {
