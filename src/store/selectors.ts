@@ -10,6 +10,7 @@ export const selectAllMedia = createSelector(
     items.map(item => ({
       ...item,
       url: uploadEntities[item.id]?.url,
+      thumbnail: uploadEntities[item.id]?.thumbnail,
       uploadStatus: uploadEntities[item.id]?.uploadStatus,
     })),
 );

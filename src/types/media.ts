@@ -13,10 +13,12 @@ export type MediaItem = {
 export type UploadItem = {
   id: string;
   url?: string;
+  thumbnail?: string;
   uploadStatus: UploadStatus;
 };
 
 export type MediaItemView = MediaItem & {
   url?: string;
+  thumbnail?: string;
   uploadStatus?: UploadStatus;
 };

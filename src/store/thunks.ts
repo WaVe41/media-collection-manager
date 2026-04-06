@@ -22,9 +22,10 @@ export const removeMediaItem =
   (id: string): AppThunk =>
   (dispatch, getState) => {
     const upload = selectUploadById(getState(), id);
-    if (upload?.url?.startsWith('blob:')) {
-      URL.revokeObjectURL(upload.url);
-    }
+
+    if (upload?.url?.startsWith('blob:')) URL.revokeObjectURL(upload.url);
+    if (upload?.thumbnail?.startsWith('blob:')) URL.revokeObjectURL(upload.thumbnail);
+
     dispatch(removeOne(id));
     dispatch(removeUploadEntry(id));
   };

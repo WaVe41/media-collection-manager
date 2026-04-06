@@ -29,10 +29,17 @@ const uploadSlice = createSlice({
         changes: { uploadStatus: 'uploading' },
       });
     },
+    setThumbnail: (state, action: PayloadAction<{ id: string; thumbnail: string }>) => {
+      uploadAdapter.updateOne(state, {
+        id: action.payload.id,
+        changes: { thumbnail: action.payload.thumbnail },
+      });
+    },
   },
 });
 
-export const { addUploadEntry, removeUploadEntry, setUploadDone, setUploadError, setUploadRetry } = uploadSlice.actions;
+export const { addUploadEntry, removeUploadEntry, setUploadDone, setUploadError, setUploadRetry, setThumbnail } =
+  uploadSlice.actions;
 
 export default uploadSlice.reducer;
 

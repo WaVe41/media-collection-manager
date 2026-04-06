@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
-import { setUploadDone, setUploadError, setUploadRetry, selectUploadEntities } from '@store/uploadSlice';
+import { setUploadDone, setUploadError, setUploadRetry, setThumbnail, selectUploadEntities } from '@store/uploadSlice';
 import { startUploadItem, removeMediaItem } from '@store/thunks';
 import { uploadFile } from '@api/mediaApi';
+import { generateThumbnail } from '@utils/generateThumbnail';
+import { getCachedThumbnail, cacheThumbnail, generateDbKey } from '@utils/thumbnailCache';
 
 const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'video/mp4'];
 const MAX_FILES = 5;
@@ -25,8 +27,10 @@ export function useUpload() {
   const dispatch = useAppDispatch();
   const uploadEntities = useAppSelector(selectUploadEntities);
   const [queue, setQueue] = useState<Record<string, ActiveUpload>>({});
+
   const controllersRef = useRef<Map<string, AbortController>>(new Map());
   const filesRef = useRef<Map<string, File>>(new Map());
+  const cancelThumbnailRef = useRef<Map<string, () => void>>(new Map());
 
   const removeFromQueue = useCallback((id: string) => {
     setQueue(prev => {
@@ -40,11 +44,47 @@ export function useUpload() {
     setQueue(prev => {
       const deletedList = Object.keys(prev).filter(id => !uploadEntities[id]);
       if (deletedList.length === 0) return prev;
+
+      for (const id of deletedList) {
+        cancelThumbnailRef.current.get(id)?.();
+      }
+
       const next = { ...prev };
       for (const id of deletedList) delete next[id];
       return next;
     });
   }, [uploadEntities]);
+
+  const generateThumbnailForFile = useCallback(
+    async (file: File, id: string) => {
+      let isCancelled = false;
+
+      cancelThumbnailRef.current.set(id, () => {
+        isCancelled = true;
+      });
+
+      try {
+        const key = generateDbKey(file.name, file.size);
+        let blob = await getCachedThumbnail(key);
+
+        if (!blob) {
+          if (isCancelled) return;
+          blob = await generateThumbnail(file, () => isCancelled);
+          cacheThumbnail(key, blob).catch(() => {});
+        }
+
+        if (isCancelled) return;
+
+        dispatch(setThumbnail({ id, thumbnail: URL.createObjectURL(blob) }));
+      } catch (err) {
+        if (err instanceof DOMException && err.name === 'AbortError') return;
+        console.warn('Thumbnail generation failed:', file.name, err);
+      } finally {
+        cancelThumbnailRef.current.delete(id);
+      }
+    },
+    [dispatch],
+  );
 
   const startUpload = useCallback(
     async (file: File, id: string) => {
@@ -71,6 +111,7 @@ export function useUpload() {
         filesRef.current.delete(id);
       } catch (err) {
         if (err instanceof DOMException && err.name === 'AbortError') {
+          // cancel click
           dispatch(removeMediaItem(id));
           removeFromQueue(id);
           filesRef.current.delete(id);
@@ -118,11 +159,12 @@ export function useUpload() {
         const id = crypto.randomUUID();
         dispatch(startUploadItem(file, id));
         startUpload(file, id);
+        generateThumbnailForFile(file, id);
       }
 
       return errors;
     },
-    [dispatch, startUpload],
+    [dispatch, startUpload, generateThumbnailForFile],
   );
 
   const cancelUpload = useCallback((id: string) => {

@@ -7,21 +7,21 @@ type Props = {
   onRemove: (id: string) => void;
 };
 
-const TYPE_STYLES: Record<MediaType, { badge: string; thumbnail: string; icon: string }> = {
+const TYPE_STYLES: Record<MediaType, { badge: string; thumbnail: string; type: string }> = {
   image: {
     badge: 'bg-blue-100 text-blue-700',
     thumbnail: 'bg-blue-50',
-    icon: '🖼',
+    type: 'image',
   },
   video: {
     badge: 'bg-purple-100 text-purple-700',
     thumbnail: 'bg-purple-50',
-    icon: '▶',
+    type: 'video',
   },
   document: {
     badge: 'bg-emerald-100 text-emerald-700',
     thumbnail: 'bg-emerald-50',
-    icon: '📄',
+    type: 'document',
   },
 };
 
@@ -31,17 +31,14 @@ export function MediaCard({ item, onRemove }: Props) {
   return (
     <div className="relative flex flex-col rounded-xl border border-slate-200 bg-white overflow-hidden">
       <div className={`${styles.thumbnail} relative flex items-center justify-center aspect-square text-4xl`}>
-        {item.url ? (
-          item.type === 'image' ? (
-            <img src={item.url} alt={item.name} className="h-full w-full" />
-          ) : (
-            <span className="select-none">{styles.icon}</span>
-          )
+        {item.thumbnail ? (
+          <img src={item.thumbnail} alt={item.name} className="h-full w-full object-cover" />
+        ) : item.url && item.type === 'image' ? (
+          <img src={item.url} alt={item.name} className="h-full w-full object-cover" />
         ) : (
-          <span className="select-none">{styles.icon}</span>
+          <span className="select-none">{styles.type}</span>
         )}
 
-        {/* Upload status overlay */}
         {item.uploadStatus === 'uploading' && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 bg-black/40">
             <span className="text-xs font-medium text-white">Uploading…</span>

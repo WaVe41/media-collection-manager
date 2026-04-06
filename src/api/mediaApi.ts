@@ -4,7 +4,7 @@ import type { FetchMediaPageResult, UploadResult } from './types';
 
 const PAGE_SIZE = 12;
 const FETCH_FAILURE_RATE = 0.15;
-const UPLOAD_FAILURE_RATE = 0.8;
+const UPLOAD_FAILURE_RATE = 0.5;
 
 const TOTAL_PROGRESS_STEPS = 20;
 

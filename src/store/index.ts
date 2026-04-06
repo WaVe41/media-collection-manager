@@ -16,6 +16,7 @@ export {
   setUploadDone,
   setUploadError,
   setUploadRetry,
+  setThumbnail,
   selectUploadById,
 } from './uploadSlice';
 export { selectAllMedia } from './selectors';
