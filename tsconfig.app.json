@@ -23,13 +23,14 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    "baseUrl": ".",
     "paths": {
       "@store": ["src/store/index"],
+      "@store/*": ["src/store/*"],
       "@api/*": ["src/api/*"],
       "@hooks/*": ["src/hooks/*"],
       "@components/*": ["src/components/*"],
-      "@utils/*": ["src/utils/*"],
-      "@types/*": ["src/types/*"]
+      "@utils/*": ["src/utils/*"]
     }
   },
   "include": ["src"]

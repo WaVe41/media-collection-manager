@@ -3,10 +3,19 @@ export type { RootState, AppDispatch } from './store';
 export { useAppDispatch, useAppSelector } from './hooks';
 export {
   fetchNextPage,
-  removeMediaItem,
-  selectAllMedia,
+  addMediaItem,
   selectMediaById,
   selectFetchStatus,
   selectHasMore,
   selectTotal,
 } from './mediaSlice';
+export { startUploadItem, removeMediaItem } from './thunks';
+export {
+  addUploadEntry,
+  removeUploadEntry,
+  setUploadDone,
+  setUploadError,
+  setUploadRetry,
+  selectUploadById,
+} from './uploadSlice';
+export { selectAllMedia } from './selectors';

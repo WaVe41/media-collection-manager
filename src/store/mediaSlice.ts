@@ -1,6 +1,6 @@
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 import { fetchMediaPage } from '@api/mediaApi';
-import type { AppDispatch, RootState } from '@store';
+import type { RootState } from '@store/store';
 import type { MediaItem } from '../types/media';
 import { createAppAsyncThunk } from './hooks';
 
@@ -36,25 +36,17 @@ export const fetchNextPage = createAppAsyncThunk(
   {
     condition: (_, { getState }) => {
       const { fetchStatus, hasMore } = getState().media;
-      // prevents double fetch
       return fetchStatus.status !== 'loading' && hasMore;
     },
   },
 );
-
-export const removeMediaItem = (id: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  const item = selectMediaById(getState(), id);
-  if (item?.url?.startsWith('blob:')) {
-    URL.revokeObjectURL(item.url);
-  }
-  dispatch(mediaSlice.actions.removeOne(id));
-};
 
 const mediaSlice = createSlice({
   name: 'media',
   initialState,
   reducers: {
     removeOne: mediaAdapter.removeOne,
+    addMediaItem: mediaAdapter.addOne,
   },
   extraReducers: builder => {
     builder
@@ -70,6 +62,7 @@ const mediaSlice = createSlice({
         state.total = total;
       })
       .addCase(fetchNextPage.rejected, (state, action) => {
+        if (action.meta.condition) return;
         state.fetchStatus = {
           status: 'error',
           error: action.error.message ?? 'Unknown error',
@@ -78,12 +71,12 @@ const mediaSlice = createSlice({
   },
 });
 
+export const { addMediaItem, removeOne } = mediaSlice.actions;
 export default mediaSlice.reducer;
 
-const adapterSelectors = mediaAdapter.getSelectors((state: RootState) => state.media);
+export const adapterSelectors = mediaAdapter.getSelectors((state: RootState) => state.media);
 
 export const selectMediaById = adapterSelectors.selectById;
-export const selectAllMedia = adapterSelectors.selectAll;
 export const selectFetchStatus = (state: RootState) => state.media.fetchStatus;
 export const selectHasMore = (state: RootState) => state.media.hasMore;
 export const selectTotal = (state: RootState) => state.media.total;

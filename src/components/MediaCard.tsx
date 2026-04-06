@@ -1,9 +1,9 @@
-import type { MediaItem, MediaType } from '../types/media';
+import type { MediaItemView, MediaType } from '../types/media';
 import { formatBytes } from '../utils/formatBytes';
 import { CloseButton } from '@components/CloseButton.tsx';
 
 type Props = {
-  item: MediaItem;
+  item: MediaItemView;
   onRemove: (id: string) => void;
 };
 
@@ -30,7 +30,7 @@ export function MediaCard({ item, onRemove }: Props) {
 
   return (
     <div className="relative flex flex-col rounded-xl border border-slate-200 bg-white overflow-hidden">
-      <div className={`relative flex items-center justify-center ${styles.thumbnail} aspect-square text-4xl`}>
+      <div className={`${styles.thumbnail} relative flex items-center justify-center aspect-square text-4xl`}>
         {item.url ? (
           item.type === 'image' ? (
             <img src={item.url} alt={item.name} className="h-full w-full" />
@@ -41,7 +41,19 @@ export function MediaCard({ item, onRemove }: Props) {
           <span className="select-none">{styles.icon}</span>
         )}
 
-        <CloseButton handleClick={() => onRemove(item.id)} />
+        {/* Upload status overlay */}
+        {item.uploadStatus === 'uploading' && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 bg-black/40">
+            <span className="text-xs font-medium text-white">Uploading…</span>
+          </div>
+        )}
+        {item.uploadStatus === 'error' && (
+          <div className="absolute inset-0 flex items-center justify-center bg-red-900/50">
+            <span className="text-xs font-medium text-white">Upload failed</span>
+          </div>
+        )}
+
+        {item.uploadStatus !== 'uploading' && <CloseButton handleClick={() => onRemove(item.id)} />}
       </div>
 
       <div className="flex flex-col gap-1 p-3">
@@ -49,7 +61,7 @@ export function MediaCard({ item, onRemove }: Props) {
           {item.name}
         </p>
         <div className="flex items-center justify-between gap-2">
-          <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-semibold ${styles.badge}`}>
+          <span className={`${styles.badge} inline-block rounded-full px-2 py-0.5 text-xs font-semibold`}>
             {item.type}
           </span>
           <span className="text-xs text-slate-500">{formatBytes(item.size)}</span>

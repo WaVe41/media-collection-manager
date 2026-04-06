@@ -39,7 +39,9 @@ const SIZES: Record<MediaType, [number, number]> = {
   document: [50_000, 2_000_000],
 };
 
-export const MOCK_ITEMS: MediaItem[] = Array.from({ length: 60 }, (_, i) => {
+const ITEMS_COUNT = 4;
+
+export const MOCK_ITEMS: MediaItem[] = Array.from({ length: ITEMS_COUNT }, (_, i) => {
   const name = ALL_NAMES[i % ALL_NAMES.length].replace(/(\.\w+)$/, `_${i + 1}$1`);
   const type = inferType(name);
   const [minSize, maxSize] = SIZES[type];

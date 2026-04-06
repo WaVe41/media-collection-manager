@@ -7,7 +7,6 @@ type Options = {
 
 export function useIntersectionObserver(onIntersect: () => void, { rootMargin = '0px', threshold = 0 }: Options = {}) {
   const sentinelRef = useRef<HTMLDivElement>(null);
-  // Keep callback ref stable so the observer never needs to reconnect on re-renders
   const onIntersectRef = useRef(onIntersect);
 
   useLayoutEffect(() => {
