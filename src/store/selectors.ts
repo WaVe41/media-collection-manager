@@ -35,8 +35,6 @@ export const selectFilteredMedia = createSelector(
     }
 
     if (sort === 'none') return result;
-    return [...result].sort((a, b) =>
-      sort === 'size' ? b.size - a.size : b.createdAt.localeCompare(a.createdAt),
-    );
+    return [...result].sort((a, b) => (sort === 'size' ? b.size - a.size : b.createdAt.localeCompare(a.createdAt)));
   },
 );
