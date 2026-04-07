@@ -44,7 +44,7 @@ The mock lives entirely in `src/api/` and is intentionally kept simple - no MSW,
 
 **Thumbnail generation runs on the main thread. (drawImage)** True non-blocking would mean `OffscreenCanvas` + a Web Worker, which is a significantly more complex setup.
 
-**IndexedDB stores `Blob` objects, not base64 strings.** Blobs are stored directly - no encoding overhead, roughly 33% smaller on disk. The trade-off is that IDB entries are never evicted.
+**IndexedDB over Cache API**.Cache API is built around HTTP request/response pairs. IndexedDB accepts any key/value natively, is better for `fileName: Blob` pairs, than create fake Url and Response. The trade-off is that IDB entries are never evicted.
 
 **Inline SVGs.** Add icon library.
 
@@ -67,5 +67,7 @@ The mock lives entirely in `src/api/` and is intentionally kept simple - no MSW,
 **`clsx` for class composition.** Makes conditional class merging more readable
 
 ## Loom Demo
+
+https://www.loom.com/share/cb61d0cda7d2494bb3135ab53eed6923
 
 
