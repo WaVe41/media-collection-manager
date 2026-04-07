@@ -45,7 +45,7 @@ const mediaSlice = createSlice({
   name: 'media',
   initialState,
   reducers: {
-    removeOne: mediaAdapter.removeOne,
+    removeMediaItem: mediaAdapter.removeOne,
     addMediaItem: mediaAdapter.addOne,
   },
   extraReducers: builder => {
@@ -71,7 +71,7 @@ const mediaSlice = createSlice({
   },
 });
 
-export const { addMediaItem, removeOne } = mediaSlice.actions;
+export const { addMediaItem, removeMediaItem } = mediaSlice.actions;
 export default mediaSlice.reducer;
 
 export const adapterSelectors = mediaAdapter.getSelectors((state: RootState) => state.media);

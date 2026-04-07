@@ -20,7 +20,7 @@ export {
   selectUploadById,
 } from './slices/uploadSlice';
 
-export { startUploadItem, removeMediaItem } from './thunks';
+export { startUploadItem, deleteMediaItem } from './thunks';
 
 export { selectAllMedia, selectFilteredMedia } from './selectors';
 export type { MediaFilter, SortOption } from './selectors';

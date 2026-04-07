@@ -1,4 +1,4 @@
-import { addMediaItem, removeOne } from './slices/mediaSlice';
+import { addMediaItem, removeMediaItem } from './slices/mediaSlice';
 import { addUploadEntry, removeUploadEntry, selectUploadById } from './slices/uploadSlice';
 import { inferMediaType } from '../utils/inferMediaType';
 import type { AppThunk } from './store';
@@ -18,7 +18,7 @@ export const startUploadItem =
     dispatch(addUploadEntry({ id, uploadStatus: 'uploading' }));
   };
 
-export const removeMediaItem =
+export const deleteMediaItem =
   (id: string): AppThunk =>
   (dispatch, getState) => {
     const upload = selectUploadById(getState(), id);
@@ -26,6 +26,6 @@ export const removeMediaItem =
     if (upload?.url?.startsWith('blob:')) URL.revokeObjectURL(upload.url);
     if (upload?.thumbnail?.startsWith('blob:')) URL.revokeObjectURL(upload.thumbnail);
 
-    dispatch(removeOne(id));
+    dispatch(removeMediaItem(id));
     dispatch(removeUploadEntry(id));
   };

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 import { setUploadDone, setUploadError, setUploadRetry, selectUploadEntities } from '@store/slices/uploadSlice';
-import { startUploadItem, removeMediaItem } from '@store/thunks';
+import { startUploadItem, deleteMediaItem } from '@store/thunks';
 import { uploadFile } from '@api/mediaApi';
 import { useThumbnail } from './useThumbnail';
 
@@ -73,7 +73,7 @@ export function useUpload() {
         filesRef.current.delete(id);
       } catch (err) {
         if (err instanceof DOMException && err.name === 'AbortError') {
-          dispatch(removeMediaItem(id));
+          dispatch(deleteMediaItem(id));
           removeFromQueue(id);
           filesRef.current.delete(id);
         } else {

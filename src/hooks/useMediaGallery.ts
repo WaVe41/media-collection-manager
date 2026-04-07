@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '@store';
-import { fetchNextPage, removeMediaItem, selectFetchStatus, selectHasMore } from '@store';
+import { fetchNextPage, deleteMediaItem, selectFetchStatus, selectHasMore } from '@store';
 import { selectFilteredMedia } from '@store/selectors';
 import { useDebounce } from './useDebounce';
 import type { MediaFilter, SortOption } from '@store';
@@ -28,7 +28,7 @@ export function useMediaGallery({ filter, sort, search }: Params) {
 
   const remove = useCallback(
     (id: string) => {
-      dispatch(removeMediaItem(id));
+      dispatch(deleteMediaItem(id));
     },
     [dispatch],
   );
