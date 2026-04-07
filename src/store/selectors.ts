@@ -11,12 +11,12 @@ export const selectAllMedia = createSelector(
   adapterSelectors.selectAll,
   selectUploadEntities,
   (items, uploadEntities): MediaItemView[] =>
-    items.map(item => ({
-      ...item,
-      url: uploadEntities[item.id]?.url,
-      thumbnail: uploadEntities[item.id]?.thumbnail,
-      uploadStatus: uploadEntities[item.id]?.uploadStatus,
-    })),
+    items.map(item => {
+      const upload = uploadEntities[item.id];
+      return upload
+        ? { ...item, kind: 'uploaded', url: upload.url, thumbnail: upload.thumbnail, uploadStatus: upload.uploadStatus }
+        : { ...item, kind: 'fetched' };
+    }),
 );
 
 export const selectFilteredMedia = createSelector(

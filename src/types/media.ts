@@ -17,8 +17,6 @@ export type UploadItem = {
   uploadStatus: UploadStatus;
 };
 
-export type MediaItemView = MediaItem & {
-  url?: string;
-  thumbnail?: string;
-  uploadStatus?: UploadStatus;
-};
+type FetchedItem = MediaItem & { kind: 'fetched' };
+type UploadedItem = MediaItem & { kind: 'uploaded'; url?: string; thumbnail?: string; uploadStatus: UploadStatus };
+export type MediaItemView = FetchedItem | UploadedItem;

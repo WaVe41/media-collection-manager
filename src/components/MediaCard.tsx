@@ -27,30 +27,34 @@ const TYPE_STYLES: Record<MediaType, { badge: string; thumbnail: string; type: s
 
 export function MediaCard({ item, onRemove }: Props) {
   const styles = TYPE_STYLES[item.type];
+  const isTypeUploaded = item.kind === 'uploaded';
+  const isUploading = isTypeUploaded && item.uploadStatus === 'uploading';
+  const isUploadError = isTypeUploaded && item.uploadStatus === 'error';
 
   return (
     <div className="relative flex flex-col rounded-xl border border-slate-200 bg-white overflow-hidden">
       <div className={`${styles.thumbnail} relative flex items-center justify-center aspect-square text-4xl`}>
-        {item.thumbnail ? (
-          <img src={item.thumbnail} alt={item.name} className="h-full w-full object-cover" />
-        ) : item.url && item.type === 'image' ? (
-          <img src={item.url} alt={item.name} className="h-full w-full object-cover" />
+        {isTypeUploaded && item.thumbnail ? (
+          <img src={item.thumbnail} alt={item.name} className="h-full w-full" />
+        ) : isTypeUploaded && item.url && item.type === 'image' ? (
+          <img src={item.url} alt={item.name} className="h-full w-full" />
         ) : (
           <span className="select-none">{styles.type}</span>
         )}
 
-        {item.uploadStatus === 'uploading' && (
+        {isUploading && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 bg-black/40">
             <span className="text-xs font-medium text-white">Uploading…</span>
           </div>
         )}
-        {item.uploadStatus === 'error' && (
+
+        {isUploadError && (
           <div className="absolute inset-0 flex items-center justify-center bg-red-900/50">
             <span className="text-xs font-medium text-white">Upload failed</span>
           </div>
         )}
 
-        {item.uploadStatus !== 'uploading' && <CloseButton handleClick={() => onRemove(item.id)} />}
+        {!isUploading && <CloseButton handleClick={() => onRemove(item.id)} />}
       </div>
 
       <div className="flex flex-col gap-1 p-3">
