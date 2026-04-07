@@ -7,21 +7,21 @@ type Props = {
   onRemove: (id: string) => void;
 };
 
-const TYPE_STYLES: Record<MediaType, { badge: string; thumbnail: string; type: string }> = {
+const TYPE_STYLES: Record<MediaType, { badge: string; thumbnail: string; icon: string }> = {
   image: {
     badge: 'bg-blue-100 text-blue-700',
     thumbnail: 'bg-blue-50',
-    type: 'image',
+    icon: '🖼',
   },
   video: {
     badge: 'bg-purple-100 text-purple-700',
     thumbnail: 'bg-purple-50',
-    type: 'video',
+    icon: '▶',
   },
   document: {
     badge: 'bg-emerald-100 text-emerald-700',
     thumbnail: 'bg-emerald-50',
-    type: 'document',
+    icon: '📄',
   },
 };
 
@@ -39,7 +39,7 @@ export function MediaCard({ item, onRemove }: Props) {
         ) : isTypeUploaded && item.url && item.type === 'image' ? (
           <img src={item.url} alt={item.name} className="h-full w-full" />
         ) : (
-          <span className="select-none">{styles.type}</span>
+          <span className="select-none">{styles.icon}</span>
         )}
 
         {isUploading && (
